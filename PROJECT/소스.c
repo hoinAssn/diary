@@ -338,7 +338,7 @@ void dcyto(char x[], char y[]) {  //입력 문장 복호화
             break;
         }
 
-        for (int i = 0; i < strlen(str); i++, j++) {
+        for (int i = 0, j = 0; i < strlen(str); i++, j++) {
             if (strcmp(&str[i], "\n") == 0) {
                 continue;
             }
