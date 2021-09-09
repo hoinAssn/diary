@@ -334,15 +334,17 @@ void dcyto(char x[], char y[]) {  //입력 문장 복호화
         char str[NUM];
         fgets(str, NUM, fs);  //파일을 한줄씩 불러오기
 
-        if (strcmp(str, "--------\n") == 0)
-            break;
-
         for (int i = 0; i < strlen(str); i++, j++) {
-                if (strcmp(&str[i], "\n") == 0) {
-                    continue;
-
-                str[i] -= y[j % len];
+            if (strcmp(&str[i], "\n") == 0) {
+                continue;
             }
+            
+            str[i] -= y[j % len];
+        }
+
+        if (strcmp(str, ",,,0,,,0\n") == 0) {
+            printf("----------\n");
+            break;
         }
 
         printf("%s", str);
