@@ -307,11 +307,10 @@ char* ecyto(char y[]) {  //비밀번호 암호화
 }
 
 char* encryption(char x[], char y[]) {  //문장 암호화
-
-    for (int i = 0; i < strlen(x); i++) {
-        for (int j = 0; j < strlen(y); j++) {
-            x[i] += y[j];
-        }
+    int j = 0;
+    int len = strlen(y);
+    for (int i = 0; i < strlen(x); i++,j++) {
+        x[i] += y[j%len];
     }
 
     return x;
@@ -320,6 +319,8 @@ char* encryption(char x[], char y[]) {  //문장 암호화
 void dcyto(char x[], char y[]) {  //입력 문장 복호화
     char str[NUM];
     char result[NUM];
+    int j = 0;
+    int len = strlen(y);
 
     strcat(x, ".txt");  //x(ID)에 ".txt"붙이기
 
@@ -336,12 +337,11 @@ void dcyto(char x[], char y[]) {  //입력 문장 복호화
         if (strcmp(str, "--------\n") == 0)
             break;
 
-        for (int i = 0; i < strlen(str); i++) {
-            for (int j = 0; j < strlen(y); j++) {
+        for (int i = 0; i < strlen(str); i++, j++) {
                 if (strcmp(&str[i], "\n") == 0) {
                     continue;
-                }
-                str[i] -= y[j];
+
+                str[i] -= y[j % len];
             }
         }
 
