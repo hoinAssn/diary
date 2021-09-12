@@ -56,25 +56,27 @@ int main()
 
 //회원가입된 계정
 void fx(void) {
-    int a = 0; //
+    int a = 0; //for문용 변수
 
     FILE* fs;
-    fopen_s(&fs, "privacy.txt", "r"); //파일 제작
+    fopen_s(&fs, "privacy.txt", "r"); //읽기모드로 파일 제작
 
-    if (fs == NULL) {  //fs가 NULL이면 읽기모드로 파일을 제작
+    if (fs == NULL) { //fs가 NULL이면 쓰기모드로 파일을 제작
         fopen_s(&fs, "privacy.txt", "w");
     }
 
     printf("\n현재 회원가입된 계정\n");
 
-    while (feof(fs) == 0) {  //파일의 커서가 끝이라면 반복 종료
-        char iary[NUM];
+    //파일읽기
+    while (feof(fs) == 0) {
+        char iary[NUM]; //파일읽기용 변수
         fgets(iary, NUM, fs);
         a++;
     }
 
     fseek(fs, 0, SEEK_SET);  //파일의 커서 위치를 맨처음으로 이동
 
+    //파일읽고 출력
     if (a != 1) {
         for (int i = 0; i < a - 1; i++) {
             char str[NUM];
@@ -87,15 +89,17 @@ void fx(void) {
     else if (a == 1) {
         printf("\n회원가입된 계정이 없습니다.\n");
     }
+
     printf("================================\n");
-    fclose(fs);
+    fclose(fs); //파일닫기
 }
 
-void signup(line* p[]) {  //회원가입
-    int number = 0;
-    char ID[NUM];
-    char pswd[NUM];
-    char result[NUM];
+//회원가입
+void signup(line* p[]) {
+    int number = 0; //사용자 입력 변수
+    char ID[NUM]; //사용자 입력 변수
+    char pswd[NUM]; //사용자 입력 변수
+    char result[NUM]; //저장용 변수
 
     system("mode con cols=50 lines=16");
     system("cls");
@@ -109,21 +113,22 @@ void signup(line* p[]) {  //회원가입
     scanf_s(" %s", &pswd, sizeof(pswd));
 
     FILE* fs;
-    fopen_s(&fs, "privacy.txt", "a+");  //파일 제작(a+, 쓰기,읽기)
+    fopen_s(&fs, "privacy.txt", "a+"); //쓰기,읽기모드로 파일 제작
 
-    while (feof(fs) == 0) {  //파일의 커서가 끝이라면 반복 종료
-        char str[NUM];
+    //있는 계정인지 확인
+    while (feof(fs) == 0) {
+        char str[NUM]; //파일읽기용 변수
 
-        fgets(str, NUM, fs);  //파일을 한줄씩 불러오기
-        char* ptr = strtok(str, " ");  //" "를 기준으로 분리
+        fgets(str, NUM, fs);
+        char* ptr = strtok(str, " ");
 
-        while (ptr != NULL) {  //ptr이 NULL이 아니라면 반복
+        while (ptr != NULL) {
 
             if (strcmp(ptr, ID) == 0) {
                 printf("\n이미 있는 아이디입니다. 다시 입력해주세요.");
                 fclose(fs);
                 Sleep(1500);
-                signup(p);  //재귀
+                signup(p);
             }
 
             else
