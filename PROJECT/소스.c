@@ -1,3 +1,4 @@
+//헤더파일 선언
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,28 +8,30 @@
 
 #define NUM 100
 
+//구조체 선언
 typedef struct line {
     char a[NUM];
 } line;
 
-void hprintf(void);  //오류
-void necrophilia(void);  //시간
-void fx(void);  //회원가입 된 계정
-void signup(line* p[]);  //회원가입
-void login(line* p[]);  //로그인
-void import(line* p[], char x[], char y[]);  //중요
-char* ecyto(char y[]);  //비밀번호 암호화
-char* encryption(char x[], char y[]);  //입력 문장 암호화
-void dcyto(char x[], char y[]);  //입력 문장 복호화
+//함수선언
+void hprintf(void);
+void necrophilia(void);
+void fx(void);
+void signup(line* p[]);
+void login(line* p[]);
+void import(line* p[], char x[], char y[]);
+char* ecyto(char y[]);
+char* encryption(char x[], char y[]);
+void dcyto(char x[], char y[]);
 
 int main()
 {
-    int number = 0;
-    line* p[NUM];
+    int number = 0; //사용자 입력 변수
+    line* p[NUM]; //구조체 변수
 
-    system("mode con cols=32 lines=30");
+    system("mode con cols=32 lines=30"); //콘솔창 크기 조정
 
-    necrophilia();
+    necrophilia(); //함수호출
 
     fx();
 
@@ -37,25 +40,26 @@ int main()
 
     switch (number) {
 
-    case 1:  //number(입력받은숫자)가 1이면 signup함수로 이동
+    case 1: //number(입력받은숫자)가 1이면 signup함수로 이동
         signup(p);
         break;
 
-    case 2:  //number가 2이면 login함수로 이동
+    case 2: //number가 2이면 login함수로 이동
         login(p);
         break;
 
-    default:  //number가 1, 2 중에 없다면 종료
+    default: //number가 1, 2 중에 없다면 종료
         hprintf();
         return;
     }
 }
 
+//회원가입된 계정
 void fx(void) {
-    int a = 0;
+    int a = 0; //
 
     FILE* fs;
-    fopen_s(&fs, "privacy.txt", "r");  //파일 제작(r, 읽기)
+    fopen_s(&fs, "privacy.txt", "r"); //파일 제작
 
     if (fs == NULL) {  //fs가 NULL이면 읽기모드로 파일을 제작
         fopen_s(&fs, "privacy.txt", "w");
