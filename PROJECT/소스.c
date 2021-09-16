@@ -5,7 +5,6 @@
 #include <windows.h>
 #include <time.h>
 #define _CRT_SECURE_NO_WARNINGS
-
 #define NUM 100
 
 //구조체 선언
@@ -136,12 +135,12 @@ void signup(line* p[]) {
         }
     }
 
-    strcpy(result, ecyto(pswd));  //result에 pswd를 암호화한 값을 복사
-    strcat(ID, " ");  //ID에 " "를 붙이기
-    strcat(result, "\n");  //result에 "\n"을 붙이기
+    strcpy(result, ecyto(pswd));
+    strcat(ID, " ");
+    strcat(result, "\n");
 
-    fputs(ID, fs);  //ID를 파일에 저장
-    fputs(result, fs);  //result를 파일에 저장
+    fputs(ID, fs);
+    fputs(result, fs);
     fclose(fs);
 
     system("cls");
@@ -174,11 +173,12 @@ void signup(line* p[]) {
     }
 }
 
-void login(line* p[]) {  //로그인
-    char ID[NUM];
-    char pswd[NUM];
-    char result[NUM];
-    char ps[NUM];
+//로그인
+void login(line* p[]) {
+    char ID[NUM]; //사용자 입력 변수
+    char pswd[NUM]; //사용자 입력 변수
+    char result[NUM]; //저장용 변수
+    char ps[NUM]; //저장용 변수
 
     system("mode con cols=50 lines=16");
     system("cls");
@@ -194,23 +194,24 @@ void login(line* p[]) {  //로그인
     strcpy(ps, pswd);
 
     FILE* fs;
-    fopen_s(&fs, "privacy.txt", "r");  //파일 제작(r, 읽기)
+    fopen_s(&fs, "privacy.txt", "r"); //읽기모드로 파일 제작
 
-    strcpy(result, ecyto(pswd));  //result에 pswd를 암호화한 값을 복사
-    strcat(result, "\n");  //result에 "\n"을 붙이기
+    strcpy(result, ecyto(pswd));
+    strcat(result, "\n");
 
-    while (feof(fs) == 0) {  //파일의 커서가 끝이라면 반복 종료
-        int a;
+    //회원가입한 계정과 맞는지 확인
+    while (feof(fs) == 0) {
+        int a; //사용자 입력 변수
         char str[NUM];
 
-        fgets(str, NUM, fs);  //파일을 한줄씩 불러오기
-        char* ptr = strtok(str, " ");  //ptr을 " "를 기준으로 분리
+        fgets(str, NUM, fs);
+        char* ptr = strtok(str, " ");
 
-        while (ptr != NULL) {  //ptr이 NULL이 아니라면 반복
+        while (ptr != NULL) {
 
-            if (strcmp(ptr, ID) == 0) {  //ptr과 ID가 같다면 다음 문자열을 " "를 기준으로 분리
+            if (strcmp(ptr, ID) == 0) {
                 ptr = strtok(NULL, " ");
-                if (strcmp(ptr, result) == 0) {  //ptr과 result가 같다면 import함수로 넘기기
+                if (strcmp(ptr, result) == 0) {
 
                     system("cls");
                     Sleep(1000);
@@ -227,17 +228,17 @@ void login(line* p[]) {  //로그인
                     printf("\n1. 문장 입력 / 2. 문장 복호화 : ");
                     scanf_s("%d", &a, sizeof(a));
                     switch (a) {
-                    case 1:
+                    case 1: //입력한 숫자(a)가 1이면 import함수로 이동
                         import(p, ID, ps);
                         return;
-                    case 2:
+                    case 2: //a가 2이면 dcyto함수로 이동
                         dcyto(ID, ps);
                         return;
                     }
                 }
             }
 
-            else if (strcmp(ptr, ID) != 0) {  //ptr과 ID가 같다면 다음 문자열을 " "를 기준으로 분리
+            else if (strcmp(ptr, ID) != 0) {
                 break;
             }
         }
@@ -247,19 +248,20 @@ void login(line* p[]) {  //로그인
     fclose(fs);
 }
 
-void import(line* p[], char x[], char y[]) {  //중요
-    char stc[NUM];
-    char result[NUM];
-    char x1[NUM];
+//문장입력
+void import(line* p[], char x[], char y[]) {
+    char stc[NUM]; //사용자 입력 변수
+    char result[NUM]; //저장용 변수
+    char x1[NUM]; //저장용 변수
 
     strcpy(x1, x);
-    strcat(x, ".txt");  //x(ID)에 ".txt"붙이기
+    strcat(x, ".txt");
 
     FILE* fs;
-    fopen_s(&fs, x, "a");  //파일 제작(a, 이어쓰기)
+    fopen_s(&fs, x, "a"); //이어쓰기모드로 파일 제작
 
     for (int i = 0; i < NUM; i++) {
-        p[i] = NULL;  //구조체 배열을 NULL로 초기화
+        p[i] = NULL; //구조체 배열 초기화
     }
 
     system("cls");
@@ -274,74 +276,79 @@ void import(line* p[], char x[], char y[]) {  //중요
 
     printf("\n\n#end#를 입력하시면 종료됩니다.\n(*엔터를 누르면 수정 불가*)\n\n");
 
+    //문장입력
     for (int i = 0; i < NUM; i++) {
 
         if (p[i] == NULL) {
-            p[i] = (line*)malloc(sizeof(line));  //동적할당을 이용하여 메모리 생성
-            scanf_s("%s", &stc, sizeof(stc));  //문장 입력
+            p[i] = (line*)malloc(sizeof(line)); //동적할당 메모리 생성
+            scanf_s("%s", &stc, sizeof(stc));
 
-            if (strcmp(stc, "#end#") == 0) {  //종료 조건
+            if (strcmp(stc, "#end#") == 0) { //종료 문자열 입력시 종료
                 char tmp[] = "--------";
-                strcpy(result, encryption(tmp, y));  // result에 tmp를 암호화 하여 복사
-                fputs(result, fs);  //result를 파일에 저장
-                fputs("\n", fs);  //"\n"을 파일에 저장
+                strcpy(result, encryption(tmp, y));
+                fputs(result, fs);
+                fputs("\n", fs);
                 free(p[i]);
-                break;  //같다면 종료
+                break;
             }
-            strcpy(result, encryption(stc, y));  //아니라면 result에 stc를 암호화 하여 복사
-            fputs(result, fs);  //result를 파일에 저장
-            fputs("\n", fs);  //"\n"을 파일에 저장
+
+            strcpy(result, encryption(stc, y));
+            fputs(result, fs);
+            fputs("\n", fs);
             free(p[i]);
         }
     }
     fclose(fs);
 }
 
-char* ecyto(char y[]) {  //비밀번호 암호화
-    int a = 0, b = 0;
+//비밀번호 암호화
+char* ecyto(char y[]) {
+    int a = 0, b = 0; //저장용 변수
 
-    for (int k = 0; k < 2; k++) {  //두번 반복
-        for (int i = 0; i < strlen(y); i++) {  //y(pswd)의 길이만큼 반복
+    for (int k = 0; k < 2; k++) {
+        for (int i = 0; i < strlen(y); i++) { //약수의 개수만큼 더하기(카이사르)
             a = 0;
             for (int j = 1; j <= y[i] + b; j++) {
                 if ((y[i] + b) % j == 0) {
-                    a += 1;  //약수의 개수
+                    a += 1;
                 }
             }
             b = a;
-            y[i] += b;  //약수의 개수만큼 더해 암호화
+            y[i] += b;
         }
     }
     return y;
 }
 
-char* encryption(char x[], char y[]) {  //문장 암호화
-    int j = 0;
-    int len = strlen(y);
-    for (int i = 0; i < strlen(x); i++,j++) {
+//문장 암호화
+char* encryption(char x[], char y[]) {
+    int j = 0; //for문용 변수
+    int len = strlen(y); //저장용 변수
+    for (int i = 0; i < strlen(x); i++,j++) { //비즈네르
         x[i] += y[j%len];
     }
 
     return x;
 }
 
-void dcyto(char x[], char y[]) {  //입력 문장 복호화
-    char str[NUM];
-    char result[NUM];
-    int j = 0;
-    int len = strlen(y);
+//입력 문장 복호화
+void dcyto(char x[], char y[]) {
+    char str[NUM]; //암호화 문장 변수
+    int j = 0; //for문용 변수
+    int len = strlen(y); //저장용 변수
 
-    strcat(x, ".txt");  //x(ID)에 ".txt"붙이기
+    strcat(x, ".txt");
 
     FILE* fs;
-    fopen_s(&fs, x, "r");  //파일 제작(r, 읽기)
+    fopen_s(&fs, x, "r"); //읽기모드로 파일 제작
 
     printf("\n");
 
-    while (feof(fs) == 0) {  //파일의 커서가 끝이라면 반복 종료
+    //복호화
+    while (feof(fs) == 0) {
 
         char str[NUM];
-        fgets(str, NUM, fs);  //파일을 한줄씩 불러오기
+        fgets(str, NUM, fs);
 
         if (strcmp(str, "--------\n") == 0) {
             break;
@@ -361,7 +368,8 @@ void dcyto(char x[], char y[]) {  //입력 문장 복호화
     fclose(fs);
 }
 
-void necrophilia(void) {  //시간
+//시간
+void necrophilia(void) {
     time_t tnow;
     struct tm* t;
     time(&tnow);
