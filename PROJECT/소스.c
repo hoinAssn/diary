@@ -394,4 +394,3 @@ void necrophilia(void) {
 void hprintf(void) {
     printf("\n잘못입력되었습니다.\n");
 }
-d
