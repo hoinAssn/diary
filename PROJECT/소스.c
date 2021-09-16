@@ -390,6 +390,7 @@ void necrophilia(void) {
     printf("\n");
 }
 
-void hprintf(void) {  //오류
+//오류
+void hprintf(void) {
     printf("\n잘못입력되었습니다.\n");
 }
